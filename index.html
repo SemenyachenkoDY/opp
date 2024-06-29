@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экзаменационные вопросы по модулю ОПП</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Экзаменационные вопросы по модулю ОПП</h1>
+        <nav>
+            <ul>
+                <li><a href="#ticket1">Билет 1</a></li>
+                <li><a href="#ticket2">Билет 2</a></li>
+                <!-- Добавьте ссылки на остальные билеты -->
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="ticket1">
+            <h2>Билет 1</h2>
+            <h3>Агрегированные функции для анализа данных. GROUP BY в А-функциях. Примеры:</h3>
+            <p>Агрегатная функция выполняет вычисление над набором строк и возвращает одно значение. Производится расчет данных верхнего уровня на основе данных нижнего уровня. Агрегированные функции в базах данных используются для вычисления сумм, средних значений, минимумов, максимумов и других агрегированных результатов по группам данных. Оператор GROUP BY используется в SQL для группировки строк на основе значений столбца или столбцов и применения агрегированных функций к каждой группе.</p>
+            <pre><code>
+SELECT state, round(sum(sales_amount)) as сумма_продаж
+FROM sales
+JOIN dealerships d on sales.dealership_id = d.dealership_id
+GROUP BY state;
+            </code></pre>
+            <pre><code>
+SELECT department, MIN(salary), MAX(salary)
+FROM employees
+GROUP BY department;
+            </code></pre>
+            <pre><code>
+SELECT country, COUNT(DISTINCT customer_id)
+FROM customers
+GROUP BY country;
+            </code></pre>
+        </section>
+        
+        <section id="ticket2">
+            <h2>Билет 2</h2>
+            <h3>Использование агрегации для очистки данных и проверки качества данных. Примеры:</h3>
+            <p>Использование агрегации для очистки данных и проверки качества данных может быть полезным при работе с большими объемами информации. Один из способов проверки качества данных – поиск пропущенных значений в столбцах и подсчет их с помощью оператора GROUP BY.</p>
+            <pre><code>
+SELECT COUNT(*) AS missing_age_count
+FROM users
+WHERE age IS NULL;
+            </code></pre>
+            <pre><code>
+SELECT AVG(Цена) AS AveragePrice
+FROM Products
+WHERE Цена IS NOT NULL;
+            </code></pre>
+            <pre><code>
+SELECT Дата, SUM(Сумма) AS TotalAmount
+FROM Orders
+GROUP BY Дата
+ORDER BY Дата;
+            </code></pre>
+        </section>
+        
+        <!-- Добавьте остальные билеты -->
+    </main>
+    <footer>
+        <p>&copy; 2024 Экзаменационные вопросы по модулю ОПП</p>
+    </footer>
+</body>
+</html>
