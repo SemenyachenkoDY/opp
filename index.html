@@ -61,9 +61,8 @@ select customer_id, count(sales_transaction_date)
 from sales
 group by customer_id;
             </code></pre>
-        </section>
- 	    <h3>.Создайте в CMS WordPress пользовательское меню из трех пунктов, к каждому из которых привязана отдельная страница. Разместите на страницах изображения, таблицы, маркированные списки и ссылки.</h3>
-	    
+            <h3>.Создайте в CMS WordPress пользовательское меню из трех пунктов, к каждому из которых привязана отдельная страница. Разместите на страницах изображения, таблицы, маркированные списки и ссылки.</h3>
+        </section>	    
         <section id="ticket2">
             <h2>Билет 2</h2>
             <h3>Использование агрегации для очистки данных и проверки качества данных. Поиск пропущенных значений с помощью GROUP BY. Приведите примеры.</h3>
@@ -160,9 +159,8 @@ SELECT Дата, Сумма,
 FROM Продажи;
 	    <p>Оконные функции могут быть использованы для выполнения различных статистических вычислений, таких как среднее значение, медиана, стандартное отклонение и другие. Эти функции позволяют анализировать данные внутри определенного окна, что дает более гибкие и детальные результаты анализа данных.</p>
             </code></pre>
-		
+            <h3>.Создайте в CMS Joomla три роли: зарегистрированный пользователь, менеджер и директор. При входе у каждого из них должно появляться меню, состоящее из двух пунктов. Первый пункт открывает страницу, общую для всех пользователей, а второй - только для соответствующей роли.</h3>
 	</section>
- 	    <h3>.Создайте в CMS Joomla три роли: зарегистрированный пользователь, менеджер и директор. При входе у каждого из них должно появляться меню, состоящее из двух пунктов. Первый пункт открывает страницу, общую для всех пользователей, а второй - только для соответствующей роли.</h3>
 	</section>
 
 
@@ -229,11 +227,22 @@ df.plot.bar(x='Страна', y='Население', title='Население 
 
         <section id="ticket5">
             <h2>Билет 5</h2>
-    	    <h3>Вопрос 3:</h3>
+    	    <h3>Вопрос 5:</h3>
             <p>Текст вопроса и ответа на него...</p>
             <pre><code>
 SQL или другой код, если необходимо
             </code></pre>
+    	    <h3>Рассчитать самую низкую цену, самую высокую цену, среднюю цену и стандартное отклонение цены для всех продуктов, которые когда-либо продавала компания.
+                Проанализировать и рассчитать стоимость продуктов, используя агрегатные функции с условием GROUP BY. </h3>
+                <p>Менеджер по маркетингу хочет знать минимальное, максимальное, среднее и стандартное отклонение цены для каждого типа продукта. Вычислить и отобразить данные, используя условие HAVING</p>
+                <pre><code>
+                 select dealership_id, product_id, min(sales_amount), max(sales_amount), round(avg(sales_amount)) as средняя_цена, STDDEV(sales_amount) as cтандартное_отклонение
+                from sales
+                where dealership_id is not null
+                group by 1, 2
+                having min(sales_amount)<> max(sales_amount)
+                order by 1, 2; 
+                </code></pre>
 	</section>
 
         <section id="ticket6">
@@ -242,6 +251,11 @@ SQL или другой код, если необходимо
             <p>Текст вопроса и ответа на него...</p>
             <pre><code>
 SQL или другой код, если необходимо
+            </code></pre>
+            <h3>Компания хочет повысить в должности продавцов в своих региональных дилерских центрах. Для этого необходимо узнать стаж работы сотрудников на занимаемой должности. Написать запрос, который ранжирует продавцов в соответствии с датой их приема на работу для каждого дилерского центра.</h3>
+            <pre><code>
+                select dealership_id, salesperson_id, hire_date, dense_rank() over(partition by dealership_id order by hire_date) as рейтинг
+                from salespeople;  
             </code></pre>
 	</section>
 
@@ -252,6 +266,20 @@ SQL или другой код, если необходимо
             <pre><code>
 SQL или другой код, если необходимо
             </code></pre>
+            <h3>Чтобы повысить эффективность продаж, отдел продаж решил покупать обед для всех продавцов в компании каждый раз, когда они превышают цифру лучшего ежедневного общего дохода, достигнутого за последние 30 дней. Напишите запрос, который выводит общий объем продаж в долларах за определенный день и цель, которую продавцы должны превзойти на этот день, начиная с 1 января 2019 года.</h3>
+            <pre><code>
+                with daily_sales as (
+                    select date(sales_transaction_date) as sales_date, sum(sales_amount) as daily_sales
+                    from sales
+                    group by date(sales_transaction_date)
+                )
+                select sales_date, daily_sales, max(daily_sales) over (
+                        order by sales_date
+                        rows between 30 preceding and current row
+                    ) as target
+                from daily_sales
+                where sales_date >= '2019-01-01';
+            </code></pre>
 	</section>
 
         <section id="ticket8">
@@ -260,6 +288,39 @@ SQL или другой код, если необходимо
             <p>Текст вопроса и ответа на него...</p>
             <pre><code>
 SQL или другой код, если необходимо
+            </code></pre>
+    	    <h3>Отдел продаж хочет видеть, как работает компания по направлению продажи в целом, а также как работают отдельные дилерские центры внутри компании. Чтобы достичь этого, руководитель отдела продаж хотел бы, чтобы вы провели для него анализ:
+                ✔	Рассчитайте общую сумму продаж по дням за все дни 2018 года (то есть до даты 1 января 2019 года);
+                ✔	Рассчитайте скользящее среднее значение за 30 дней для ежедневного 
+                количества сделок купли-продажи.</h3>
+            <pre><code>
+                with daily_sales as (
+                    select dealership_id, date(sales_transaction_date) as sales_date, sum(sales_amount) as daily_sales
+                    from sales
+                    group by 1, date(sales_transaction_date)
+                ),
+                sum_dealership as (
+                    select dealership_id, sum(sales_amount) as sum_2018
+                    from sales
+                    group by 1)
+                select dealership_id, sales_date, daily_sales, avg(daily_sales) over(
+                    order by sales_date
+                    rows between 30 preceding and current row)
+                    as скользящее_среднее,
+                    sum_2018 as сумма_за_2018
+                from daily_sales
+                join sum_dealership using(dealership_id)
+                where sales_date >= '01.01.2018' and sales_date < '01.01.2019' and dealership_id is not null
+                group by 1, 2, 3, 5
+                order by 1, 2;
+            </code></pre>
+            <pre><code>
+            Второй вариант:
+            
+                SELECT DATE(sales_transaction_date) AS day, SUM(sales_amount) AS total_sales FROM sales
+                WHERE sales_transaction_date >= '2018-01-01' AND sales_transaction_date < '2019-01-01'
+                GROUP BY DATE(sales_transaction_date)
+                ORDER BY DATE(sales_transaction_date);
             </code></pre>
 	</section>
 
